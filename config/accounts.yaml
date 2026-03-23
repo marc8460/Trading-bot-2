@@ -1,0 +1,36 @@
+# ================================================
+# PropOS — Account Definitions
+# ================================================
+# Each account maps to one MT5 terminal instance.
+# Credentials are in .env (MT5_ACCOUNT_{N}_LOGIN, etc.)
+
+accounts:
+  - id: "ftmo_main"
+    name: "FTMO Main Account"
+    mt5_credential_index: 1        # Maps to MT5_ACCOUNT_1_* in .env
+    firm: "ftmo"
+    phase: "funded"                # evaluation | verification | funded
+    group: "primary"
+    balance: 100000.0
+    enabled: true
+    risk_multiplier: 1.0
+    symbols_allowed:
+      - "EURUSD"
+      - "XAUUSD"
+      - "GBPUSD"
+
+  - id: "e8_eval"
+    name: "E8 Evaluation"
+    mt5_credential_index: 2
+    firm: "e8"
+    phase: "evaluation"
+    group: "evaluation"
+    balance: 50000.0
+    enabled: true
+    risk_multiplier: 0.8
+    symbols_allowed:
+      - "EURUSD"
+      - "XAUUSD"
+
+# Add more accounts as needed following the same schema.
+# Remember to add corresponding credentials in .env.

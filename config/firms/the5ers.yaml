@@ -1,0 +1,42 @@
+# ================================================
+# The5ers Compliance Profile
+# ================================================
+name: "The5ers"
+slug: "the5ers"
+
+rules:
+  max_daily_drawdown_pct: 4.0
+  max_total_drawdown_pct: 6.0
+  daily_drawdown_type: "equity"
+  daily_drawdown_reset_timezone: "UTC"
+  profit_target_pct: 6.0
+  max_positions: 10
+  weekend_holding_allowed: true
+  hedging_allowed: false
+  min_holding_time_seconds: 0
+  max_lot_size: 30.0
+  news_restriction:
+    enabled: true
+    minutes_before: 5
+    minutes_after: 5
+    affected_currencies: ["USD", "EUR", "GBP"]
+  ea_trading_allowed: true
+  copy_trading_allowed: false
+  martingale_allowed: false
+
+soft_limits:
+  daily_drawdown_warning_pct: 2.5
+  total_drawdown_warning_pct: 4.5
+  daily_loss_auto_stop_pct: 3.0
+
+phase_overrides:
+  evaluation:
+    profit_target_pct: 6.0
+    min_trading_days: 3
+    max_trading_days: null
+  funded:
+    profit_target_pct: null
+    profit_split_pct: 50.0
+    scaling_plan:
+      - threshold_pct: 10.0
+        new_balance_multiplier: 1.5

@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-surface text-gray-100 font-sans antialiased;
+  }
+
+  body {
+    @apply min-h-screen bg-surface;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-surface-50;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-400 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-accent;
+  }
+}
+
+@layer components {
+  /* Glass card effect */
+  .glass-card {
+    @apply bg-surface-100/80 backdrop-blur-xl border border-surface-300/50
+           rounded-xl shadow-glass transition-all duration-300;
+  }
+
+  .glass-card:hover {
+    @apply border-surface-400/70 shadow-glow;
+  }
+
+  /* Status indicator dot */
+  .status-dot {
+    @apply w-2.5 h-2.5 rounded-full;
+  }
+
+  .status-dot-active {
+    @apply bg-success animate-pulse-slow shadow-glow-success;
+  }
+
+  .status-dot-inactive {
+    @apply bg-danger shadow-glow-danger;
+  }
+
+  .status-dot-warning {
+    @apply bg-warning animate-pulse;
+  }
+
+  /* Metric card */
+  .metric-card {
+    @apply glass-card p-5 flex flex-col gap-2;
+  }
+
+  .metric-label {
+    @apply text-xs font-medium uppercase tracking-wider text-muted;
+  }
+
+  .metric-value {
+    @apply text-2xl font-bold tabular-nums;
+  }
+
+  .metric-positive {
+    @apply text-success;
+  }
+
+  .metric-negative {
+    @apply text-danger;
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply px-4 py-2 rounded-lg bg-accent hover:bg-accent-light
+           text-white font-medium text-sm transition-all duration-200
+           shadow-glow hover:shadow-lg active:scale-95;
+  }
+
+  .btn-danger {
+    @apply px-4 py-2 rounded-lg bg-danger hover:bg-danger-light
+           text-white font-medium text-sm transition-all duration-200
+           shadow-glow-danger hover:shadow-lg active:scale-95;
+  }
+
+  .btn-outline {
+    @apply px-4 py-2 rounded-lg border border-surface-400 hover:border-accent
+           text-gray-300 hover:text-white font-medium text-sm
+           transition-all duration-200 active:scale-95;
+  }
+
+  /* Navigation link */
+  .nav-link {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-lg
+           text-muted hover:text-white hover:bg-surface-200
+           transition-all duration-200 text-sm font-medium;
+  }
+
+  .nav-link-active {
+    @apply text-white bg-accent/10 border-l-2 border-accent;
+  }
+
+  /* Trade log row */
+  .trade-row {
+    @apply flex items-center justify-between px-4 py-3
+           border-b border-surface-300/30 hover:bg-surface-200/50
+           transition-colors duration-150 text-sm;
+  }
+
+  /* Drawdown gauge */
+  .gauge-track {
+    @apply w-full h-2 bg-surface-300 rounded-full overflow-hidden;
+  }
+
+  .gauge-fill {
+    @apply h-full rounded-full transition-all duration-500 ease-out;
+  }
+
+  /* Glow text */
+  .glow-text {
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent;
+  }
+}

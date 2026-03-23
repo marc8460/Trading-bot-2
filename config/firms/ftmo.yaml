@@ -1,0 +1,43 @@
+# ================================================
+# FTMO Compliance Profile
+# ================================================
+name: "FTMO"
+slug: "ftmo"
+
+rules:
+  max_daily_drawdown_pct: 5.0
+  max_total_drawdown_pct: 10.0
+  daily_drawdown_type: "balance"       # balance | equity
+  daily_drawdown_reset_timezone: "CET"
+  profit_target_pct: 10.0             # Evaluation phase
+  max_positions: 10
+  weekend_holding_allowed: false
+  hedging_allowed: false
+  min_holding_time_seconds: 30
+  max_lot_size: 100.0
+  news_restriction:
+    enabled: true
+    minutes_before: 15
+    minutes_after: 15
+    affected_currencies: ["USD", "EUR", "GBP", "JPY", "CHF", "AUD", "NZD", "CAD"]
+  ea_trading_allowed: true
+  copy_trading_allowed: false
+  martingale_allowed: false
+
+soft_limits:
+  daily_drawdown_warning_pct: 3.5
+  total_drawdown_warning_pct: 7.0
+  daily_loss_auto_stop_pct: 4.0
+
+phase_overrides:
+  evaluation:
+    profit_target_pct: 10.0
+    min_trading_days: 4
+    max_trading_days: null
+  verification:
+    profit_target_pct: 5.0
+    min_trading_days: 4
+    max_trading_days: null
+  funded:
+    profit_target_pct: null
+    profit_split_pct: 80.0

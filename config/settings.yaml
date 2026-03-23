@@ -1,0 +1,111 @@
+# ================================================
+# PropOS — Global Settings
+# ================================================
+
+app:
+  name: "PropOS"
+  version: "1.0.0"
+  env: "development"        # development | staging | production
+
+# --- Strategy ---
+strategy:
+  active_strategy: "trend_pullback"
+  symbols:
+    - symbol: "EURUSD"
+      enabled: true
+      timeframe: "M15"
+      role: "core"
+    - symbol: "XAUUSD"
+      enabled: true
+      timeframe: "M15"
+      role: "booster"
+    - symbol: "GBPUSD"
+      enabled: false
+      timeframe: "M15"
+      role: "optional"
+  tick_interval_seconds: 15
+
+# --- Risk Defaults ---
+risk:
+  default_risk_per_trade_pct: 1.0
+  max_risk_per_trade_pct: 2.0
+  max_daily_trades: 5
+  max_open_positions: 3
+  correlation_pairs:
+    - ["EURUSD", "GBPUSD"]
+  symbol_profiles:
+    EURUSD:
+      max_spread_points: 20
+      max_lot_size: 10.0
+      min_lot_size: 0.01
+    XAUUSD:
+      max_spread_points: 50
+      max_lot_size: 5.0
+      min_lot_size: 0.01
+    GBPUSD:
+      max_spread_points: 25
+      max_lot_size: 10.0
+      min_lot_size: 0.01
+
+# --- Filters ---
+filters:
+  spread:
+    enabled: true
+  session:
+    enabled: true
+    allowed_sessions:
+      - name: "London"
+        start: "08:00"
+        end: "16:00"
+        timezone: "Europe/London"
+      - name: "New York"
+        start: "08:00"
+        end: "17:00"
+        timezone: "America/New_York"
+  news:
+    enabled: true
+    minutes_before: 15
+    minutes_after: 15
+    min_impact: "high"      # low | medium | high
+  volatility:
+    enabled: true
+    atr_period: 14
+    min_atr_multiplier: 0.5
+    max_atr_multiplier: 3.0
+
+# --- Protection ---
+protection:
+  kill_switch_enabled: true
+  connection_check_interval_seconds: 30
+  max_reconnect_attempts: 5
+  abnormal_spread_multiplier: 5.0
+
+# --- Monitoring ---
+monitoring:
+  trade_log_enabled: true
+  performance_tracking: true
+  health_check_interval_seconds: 60
+
+# --- Telegram ---
+telegram:
+  enabled: true
+  notifications:
+    trade_opened: true
+    trade_closed: true
+    warnings: true
+    kill_switch: true
+    daily_summary: true
+    bot_status: true
+
+# --- API ---
+api:
+  host: "0.0.0.0"
+  port: 8000
+  cors_origins:
+    - "http://localhost:3000"
+    - "http://127.0.0.1:3000"
+
+# --- Database ---
+database:
+  url: "sqlite+aiosqlite:///./data/propos.db"
+  echo: false

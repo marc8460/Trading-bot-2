@@ -1,0 +1,39 @@
+# ================================================
+# E8 Markets Compliance Profile
+# ================================================
+name: "E8 Markets"
+slug: "e8"
+
+rules:
+  max_daily_drawdown_pct: 5.0
+  max_total_drawdown_pct: 8.0
+  daily_drawdown_type: "balance"
+  daily_drawdown_reset_timezone: "UTC"
+  profit_target_pct: 8.0
+  max_positions: 15
+  weekend_holding_allowed: true
+  hedging_allowed: true
+  min_holding_time_seconds: 0
+  max_lot_size: 50.0
+  news_restriction:
+    enabled: false
+    minutes_before: 0
+    minutes_after: 0
+    affected_currencies: []
+  ea_trading_allowed: true
+  copy_trading_allowed: true
+  martingale_allowed: false
+
+soft_limits:
+  daily_drawdown_warning_pct: 3.5
+  total_drawdown_warning_pct: 6.0
+  daily_loss_auto_stop_pct: 4.0
+
+phase_overrides:
+  evaluation:
+    profit_target_pct: 8.0
+    min_trading_days: 0
+    max_trading_days: null
+  funded:
+    profit_target_pct: null
+    profit_split_pct: 80.0
