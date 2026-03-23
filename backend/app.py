@@ -107,6 +107,35 @@ async def lifespan(app: FastAPI):
 
     logger.info("PropOS starting", version="1.0.0", env=settings.secrets.env)
     await state.update(status=SystemStatus.RUNNING)
+
+    # ── Startup Safety Banner ──
+    mode_str = settings.execution.mode.value.upper()
+    banner = [
+        "",
+        "═" * 60,
+        f"  PropOS v1.0.0 — TRADING ENGINE STARTED",
+        "═" * 60,
+        f"  EXECUTION MODE:    {mode_str}",
+        f"  CONFIRM LIVE:      {settings.execution.confirm_live}",
+        f"  MAX LOT CAP:       {settings.execution.max_lot_cap}",
+        f"  ALLOWED SYMBOLS:   {', '.join(settings.execution.allowed_symbols)}",
+        f"  ENVIRONMENT:       {settings.secrets.env}",
+        "─" * 60,
+    ]
+    # Add account connection status
+    for acc_id, acc_state_info in state.accounts.items():
+        banner.append(f"  ACCOUNT {acc_id}: connected={acc_state_info.connected}")
+    banner.append("═" * 60)
+    banner.append("")
+    for line in banner:
+        if "EXECUTION MODE" in line:
+            logger.critical(line)
+        else:
+            logger.info(line)
+
+    if mode_str == "LIVE":
+        logger.critical("⚠️  LIVE TRADING IS ACTIVE — REAL ORDERS WILL BE PLACED ⚠️")
+
     await telegram.notify_system_status("running")
 
     yield

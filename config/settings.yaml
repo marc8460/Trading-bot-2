@@ -84,6 +84,9 @@ protection:
 execution:
   mode: "dry_run"          # dry_run | paper | live
   confirm_live: true       # must be true for live mode to work
+  max_lot_cap: 0.50        # hard ceiling on any single order volume
+  allowed_symbols:         # whitelist for PAPER/LIVE execution
+    - "EURUSD"
 
 # --- Monitoring ---
 monitoring:

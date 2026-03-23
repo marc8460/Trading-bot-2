@@ -80,6 +80,32 @@ class MT5Executor:
                 error_message="Live execution blocked — confirm_live is false",
             )
 
+        # ── Safety Layer: Max Lot Cap ──
+        if order.volume > settings.execution.max_lot_cap:
+            logger.error(
+                "Order BLOCKED — volume exceeds max_lot_cap",
+                order_id=order.id,
+                volume=order.volume,
+                max_lot_cap=settings.execution.max_lot_cap,
+            )
+            return MT5OrderResult(
+                status=OrderStatus.FAILED,
+                error_message=f"Volume {order.volume} exceeds max lot cap {settings.execution.max_lot_cap}",
+            )
+
+        # ── Safety Layer: Symbol Whitelist ──
+        if order.symbol not in settings.execution.allowed_symbols:
+            logger.error(
+                "Order BLOCKED — symbol not in execution allowlist",
+                order_id=order.id,
+                symbol=order.symbol,
+                allowed=settings.execution.allowed_symbols,
+            )
+            return MT5OrderResult(
+                status=OrderStatus.FAILED,
+                error_message=f"Symbol {order.symbol} not in allowed list: {settings.execution.allowed_symbols}",
+            )
+
         try:
             import MetaTrader5 as mt5
 

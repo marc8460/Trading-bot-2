@@ -125,6 +125,11 @@ class ExecutionMode(str, Enum):
 class ExecutionSettings(BaseModel):
     mode: ExecutionMode = ExecutionMode.DRY_RUN
     confirm_live: bool = True
+    max_lot_cap: float = Field(0.50, description="Hard ceiling on any single order volume")
+    allowed_symbols: list[str] = Field(
+        default_factory=lambda: ["EURUSD"],
+        description="Whitelist of symbols allowed for PAPER/LIVE execution",
+    )
 
 
 class TelegramNotificationSettings(BaseModel):
