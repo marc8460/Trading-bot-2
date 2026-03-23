@@ -19,6 +19,7 @@ from typing import Any
 import yaml
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
+from enum import Enum
 
 
 # ──────────────────────────────────────────────
@@ -115,6 +116,17 @@ class ProtectionSettings(BaseModel):
     abnormal_spread_multiplier: float = 5.0
 
 
+class ExecutionMode(str, Enum):
+    DRY_RUN = "dry_run"
+    PAPER = "paper"
+    LIVE = "live"
+
+
+class ExecutionSettings(BaseModel):
+    mode: ExecutionMode = ExecutionMode.DRY_RUN
+    confirm_live: bool = True
+
+
 class TelegramNotificationSettings(BaseModel):
     trade_opened: bool = True
     trade_closed: bool = True
@@ -178,6 +190,7 @@ class Settings(BaseModel):
     risk: RiskSettings = Field(default_factory=RiskSettings)
     filters: FilterSettings = Field(default_factory=FilterSettings)
     protection: ProtectionSettings = Field(default_factory=ProtectionSettings)
+    execution: ExecutionSettings = Field(default_factory=ExecutionSettings)
     monitoring: MonitoringSettings = Field(default_factory=MonitoringSettings)
     telegram: TelegramSettings = Field(default_factory=TelegramSettings)
     api: ApiSettings = Field(default_factory=ApiSettings)

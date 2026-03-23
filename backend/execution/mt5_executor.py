@@ -10,6 +10,7 @@ import asyncio
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
+from backend.core.config import ExecutionMode, load_settings
 from backend.core.logging import get_logger
 from backend.models.order import Order, OrderStatus, OrderType
 
@@ -60,6 +61,25 @@ class MT5Executor:
 
     async def submit_order(self, order: Order) -> MT5OrderResult:
         """Submit an order to MT5."""
+        settings = load_settings()
+        mode = settings.execution.mode
+
+        if mode == ExecutionMode.DRY_RUN:
+            logger.info("DRY_RUN mode active — simulating order fill", order_id=order.id)
+            return MT5OrderResult(
+                status=OrderStatus.FILLED,
+                mt5_ticket=99999 + hash(order.id) % 100000,
+                mt5_retcode=10009,
+            )
+
+        if mode == ExecutionMode.LIVE and not settings.execution.confirm_live:
+            # Safety fallback, just in case
+            logger.error("Live execution blocked — confirm_live is false")
+            return MT5OrderResult(
+                status=OrderStatus.FAILED,
+                error_message="Live execution blocked — confirm_live is false",
+            )
+
         try:
             import MetaTrader5 as mt5
 
@@ -94,6 +114,28 @@ class MT5Executor:
             ):
                 request["action"] = mt5.TRADE_ACTION_PENDING
                 request["price"] = order.price
+
+            if mode == ExecutionMode.PAPER:
+                # Paper mode: validate but don't place
+                loop = asyncio.get_event_loop()
+                check_result = await loop.run_in_executor(
+                    None, lambda: mt5.order_check(request)
+                )
+                if check_result is None or check_result.retcode != 0:
+                    comment = check_result.comment if check_result else "MT5 check failed"
+                    logger.warning("Paper trading order validation failed", 
+                                   order_id=order.id, error=comment)
+                    return MT5OrderResult(
+                        status=OrderStatus.REJECTED,
+                        error_message=f"Paper check failed: {comment}",
+                    )
+                else:
+                    logger.info("PAPER mode active — order validated successfully", order_id=order.id)
+                    return MT5OrderResult(
+                        status=OrderStatus.FILLED,
+                        mt5_ticket=88888 + hash(order.id) % 100000,
+                        mt5_retcode=10009,
+                    )
 
             loop = asyncio.get_event_loop()
             result = await loop.run_in_executor(

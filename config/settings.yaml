@@ -80,6 +80,11 @@ protection:
   max_reconnect_attempts: 5
   abnormal_spread_multiplier: 5.0
 
+# --- Execution ---
+execution:
+  mode: "dry_run"          # dry_run | paper | live
+  confirm_live: true       # must be true for live mode to work
+
 # --- Monitoring ---
 monitoring:
   trade_log_enabled: true

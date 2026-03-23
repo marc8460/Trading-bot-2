@@ -19,12 +19,15 @@ def main() -> None:
 
     app = create_app()
 
+    is_dev = settings.secrets.env == "development"
+
     uvicorn.run(
-        app,
+        "backend.app:create_app" if is_dev else create_app(),
         host=settings.api.host,
         port=settings.api.port,
         log_level=settings.secrets.log_level.lower(),
-        reload=settings.secrets.env == "development",
+        reload=is_dev,
+        factory=is_dev,
     )
 
 

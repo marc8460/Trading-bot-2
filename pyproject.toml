@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "propos"
 version = "1.0.0"
@@ -12,10 +16,8 @@ dependencies = [
     "pyyaml>=6.0",
     "sqlalchemy>=2.0",
     "aiosqlite>=0.19.0",
-    "MetaTrader5>=5.0.45",
     "pandas>=2.1.0",
     "numpy>=1.26.0",
-    "pandas-ta>=0.3.14b1",
     "python-telegram-bot>=20.7",
     "apscheduler>=3.10.4",
     "structlog>=24.1.0",
@@ -24,6 +26,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+mt5 = [
+    "MetaTrader5>=5.0.45",
+]
+ta = [
+    "pandas-ta>=0.3.14b1",
+]
 dev = [
     "pytest>=7.4",
     "pytest-asyncio>=0.23",
@@ -43,3 +51,6 @@ testpaths = ["tests"]
 [tool.mypy]
 python_version = "3.11"
 strict = true
+
+[tool.setuptools.packages.find]
+include = ["backend*"]
